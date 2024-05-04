@@ -1,0 +1,135 @@
+:root {
+    --pico-font-size: 90%;
+}
+
+.App {
+    margin-top: 1rem;
+}
+
+article {
+    margin-top: 1rem;
+}
+
+.setup-screen {
+    margin-top: 10rem;
+}
+
+
+.is-completed {
+    text-decoration: line-through;
+    filter: brightness(0.5);
+}
+
+
+.achievement-wrapper {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1rem;
+}
+
+.achievement-header {
+    background-color: rgba(255, 255, 255, 0.07);
+    padding: 0.75rem;
+    transition: all 0.2s;
+    display: flex;
+}
+
+.achievement-header:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
+.achievement-header:after {
+    content: "+";
+    float: right;
+    position: relative;
+    font-size: 20px;
+    color: #00aeff;
+    right: 0;
+    top: -5px;
+}
+
+.achievement-header .icon {
+    width: 30px;
+}
+
+.achievement-header .title {
+    flex: 1;
+    margin-left: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 28px;
+}
+
+.achievement-header .completion {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 15px;
+    line-height: 28px;
+}
+
+.achievement-container {
+    padding: 10px;
+    background: black;
+}
+
+.tracker-header {
+    display: flex;
+}
+
+.tracker-header .parent-achievement-data {
+    flex: 3;
+}
+
+.tracker-header .character-data {
+    flex: 1;
+}
+
+.parent-achievement-data img {
+    width: 60px;
+    margin-right: 10px;
+    float: left;
+}
+
+.character-data img {
+    width: 60px;
+    margin-left: 10px;
+    float: right;
+}
+
+.character-data {
+    text-align: right;
+}
+
+.action-bar img {
+    max-width: 20px;
+}
+
+
+.action-bar button {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0;
+    display: flex;
+    flex: 1;
+    margin-right: 10px;
+    justify-content: center;
+}
+
+.action-bar {
+    display: flex;
+    width: 500px;
+}
+
+.action-bar img {
+    margin-right: 5px;
+}
+
+.criteria {
+    margin-left: 15px;
+    font-weight: bold;
+}
+
+.criteria.completed {
+    color: #2a3140;
+    text-decoration: line-through;
+}
