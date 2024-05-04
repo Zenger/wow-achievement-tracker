@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/wow-achievement-tracker/static/css/main.2467acca.css",
+    "main.js": "/wow-achievement-tracker/static/js/main.8ba44548.js",
+    "static/js/453.ce3323fb.chunk.js": "/wow-achievement-tracker/static/js/453.ce3323fb.chunk.js",
+    "static/media/1F4DA.svg": "/wow-achievement-tracker/static/media/1F4DA.d1be1226a2c093b474d264507d5342c6.svg",
+    "static/media/26A0.svg": "/wow-achievement-tracker/static/media/26A0.fbd5487a3a4da84dad304435762dd105.svg",
+    "index.html": "/wow-achievement-tracker/index.html",
+    "static/media/2795.svg": "/wow-achievement-tracker/static/media/2795.7ddf83c19bccc87df71894487a5083c6.svg",
+    "static/media/2714.svg": "/wow-achievement-tracker/static/media/2714.698254ebfecb14ba2387e247ffaf6e93.svg",
+    "main.2467acca.css.map": "/wow-achievement-tracker/static/css/main.2467acca.css.map",
+    "main.8ba44548.js.map": "/wow-achievement-tracker/static/js/main.8ba44548.js.map",
+    "453.ce3323fb.chunk.js.map": "/wow-achievement-tracker/static/js/453.ce3323fb.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2467acca.css",
+    "static/js/main.8ba44548.js"
+  ]
+}
