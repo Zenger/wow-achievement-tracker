@@ -25,8 +25,8 @@ const SetupScreen = (props: SetupScreenProps) => {
         }
         if (save_credentials) {
             localStorage.setItem('pain_tracker', JSON.stringify({
-                client_id: client_id.toLowerCase().trim(),
-                client_secret: client_secret.toLowerCase().trim(),
+                client_id: client_id.trim(),
+                client_secret: client_secret.trim(),
                 character_name: character_name.toLowerCase().trim(),
                 realm_name: realm_name.toLowerCase().trim(),
                 save_credential: save_credentials
