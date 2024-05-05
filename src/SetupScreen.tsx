@@ -97,8 +97,7 @@ const SetupScreen = (props: SetupScreenProps) => {
                     <input aria-busy={isLoading} type="submit" value="Save" disabled={isLoading}/>
                 </fieldset>
             </form>
-
-
+            <p>Icons courtesy of <a href={"https://openmoji.org/"}>Open Emoji</a>.</p>
         </div>
     )
 };

@@ -3,6 +3,7 @@ import PlusIcon from "./assets/2795.svg";
 import BooksIcon from './assets/1F4DA.svg';
 import WarningIcon from './assets/26A0.svg';
 import CheckmarkIcon from './assets/2714.svg';
+import CrossIcon from './assets/274C.svg';
 import {Achievement, Criteria, CriteriaObject} from "./Interfaces";
 import AchievementBlock from "./components/AchievementBlock";
 
@@ -239,6 +240,14 @@ const TrackerScreen = (props: TrackerScreenProps) => {
         setIsPlannerOpen(true)
     }
 
+
+    const deleteSession = () => {
+        localStorage.removeItem('pain_tracker_achievement_id');
+        localStorage.removeItem('pain_tracker');
+        localStorage.removeItem('pain_tracker_access_token');
+        window.location.reload();
+    }
+
     return <CharacterAchievementsProvider isLoading={isLoading} achievements={allAchievements}>
         <div>
             <div className={'tracker-header'}>
@@ -264,6 +273,7 @@ const TrackerScreen = (props: TrackerScreenProps) => {
                 </button>
                 <button disabled={isLoading}  onClick={() => startPlanner()} className="outline contrast"><img src={BooksIcon}/> AI Planner</button>
                 <button disabled={isLoading}  onClick={() => setExpanded(!expanded)} className="outline contrast"><img src={PlusIcon}/> Expand All</button>
+                <button disabled={isLoading} onClick={deleteSession} className="outline contrast"><img src={CrossIcon}/> Delete Session</button>
 
             </div>
             <hr/>
