@@ -1,9 +1,14 @@
 import React, {useState} from "react";
 import {UnauthorizedError} from "./helpers";
 import ErrorModal from "./components/ErrorModal";
+import LogoImage from "./assets/logo.svg";
+
 interface SetupScreenProps {
     onAccessTokenCreated: (accessToken: string) => void;
 }
+
+
+
 const SetupScreen = (props: SetupScreenProps) => {
 
     const [clientId, setClientId] = useState('');
@@ -66,6 +71,10 @@ const SetupScreen = (props: SetupScreenProps) => {
 
     return (
         <div className="setup-screen">
+            <div className={'logo'}>
+                <img src={LogoImage} />
+                <h3>WoW Achievement Tracker</h3>
+            </div>
             <article>
                 <p>You will need to create an application on the Blizzard Developer Portal to get your client ID and
                     client secret. </p>

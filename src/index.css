@@ -11,7 +11,7 @@ article {
 }
 
 .setup-screen {
-    margin-top: 10rem;
+    margin-top: 5rem;
 }
 
 
@@ -136,4 +136,17 @@ article {
 article.alert {
     background-color: #423c00;
     color: #fff;
+}
+
+.logo {
+    width: 300px;
+    margin: 0 auto;
+    display: block;
+}
+.logo h3 { text-align: center; }
+
+.logo img {
+    width: 100px;
+    margin: 0 auto;
+    display: block;
 }
