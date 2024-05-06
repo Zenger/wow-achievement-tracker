@@ -21,7 +21,7 @@ interface AchievementResponseBlob {
         }[];
     }
 }
-// `https://us.api.blizzard.com/data/wow/achievement/${id}?namespace=static-us&locale=en_US&access_token=USBLmlxQTIyuNv8g30RITAw9K1OGpk92hw`
+// `https://us.api.blizzard.com/data/wow/achievement/${id}?namespace=static-us&locale=en_US&accessToken=USBLmlxQTIyuNv8g30RITAw9K1OGpk92hw`
 
 
 
@@ -61,7 +61,7 @@ class Achievement {
 
     private async fetchAchievement(id: number): Promise<AchievementResponseBlob | null> {
         try {
-            const response = await fetch(`https://us.api.blizzard.com/data/wow/achievement/${id}?namespace=static-us&locale=en_US&access_token=USBLmlxQTIyuNv8g30RITAw9K1OGpk92hw`);
+            const response = await fetch(`https://us.api.blizzard.com/data/wow/achievement/${id}?namespace=static-us&locale=en_US&accessToken=USBLmlxQTIyuNv8g30RITAw9K1OGpk92hw`);
             if (!response.ok) throw new Error('Network response was not ok');
             return await response.json() as AchievementResponseBlob;
         } catch (error) {

@@ -105,7 +105,6 @@ article {
     max-width: 20px;
 }
 
-
 .action-bar button {
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 0;
@@ -132,4 +131,9 @@ article {
 .criteria.completed {
     color: #2a3140;
     text-decoration: line-through;
+}
+
+article.alert {
+    background-color: #423c00;
+    color: #fff;
 }

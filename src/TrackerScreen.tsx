@@ -7,8 +7,9 @@ import CrossIcon from './assets/274C.svg';
 import {Achievement, Criteria, CriteriaObject} from "./Interfaces";
 import AchievementBlock from "./components/AchievementBlock";
 
-import {wu} from "./helpers";
+import {deleteUserSession, UnauthorizedError, wu} from "./helpers";
 import Planner from "./components/Planner";
+import ErrorModal from "./components/ErrorModal";
 
 
 interface TrackerScreenProps {
@@ -78,12 +79,12 @@ const TrackerScreen = (props: TrackerScreenProps) => {
     const [isTracked, setIsTracked] = useState(false);
     const [allAchievements, setAllAchievements] = useState<any[]>([]);
     const {
-        client_id,
-        client_secret,
-        character_name,
-        realm_name,
+        clientId,
+        clientSecret,
+        characterName,
+        realmName,
         save_credentials
-    } = JSON.parse(localStorage.getItem('pain_tracker') || '{}');
+    } = JSON.parse(localStorage.getItem('wowTrackerUserData') || '{}');
 
     const [isPlannerOpen, setIsPlannerOpen] = useState<boolean>(false);
 
@@ -93,13 +94,29 @@ const TrackerScreen = (props: TrackerScreenProps) => {
 
     const [expanded, setExpanded] = useState<boolean>(false);
 
+    const [error, setError] = useState<string>('');
+
     useEffect(() => {
 
         // fetch all achievements
-        fetch(`https://us.api.blizzard.com/profile/wow/character/${realm_name}/${character_name}/achievements?namespace=profile-us&locale=en_US`,
-            {headers: {'Authorization': 'Bearer ' + props.accessToken}}).then(response => response.json()).then((data) => {
+        fetch(`https://us.api.blizzard.com/profile/wow/character/${realmName}/${characterName}/achievements?namespace=profile-us&locale=en_US`,
+            {headers: {'Authorization': 'Bearer ' + props.accessToken}}).then((response) => {
+            if (response.status === 401) {
+                throw new UnauthorizedError('Invalid access token');
+            } else if (response.status !== 200) {
+                throw new Error('Something went wrong, check logs');
+            } else {
+                return response.json();
+            }
+        }).then((data) => {
             setAllAchievements(data.achievements);
-        });
+        }).catch((error) => {
+            if (error instanceof UnauthorizedError) {
+                setError(error.message);
+            } else {
+                setError('Something went wrong, check logs');
+            }
+        })
 
         // load achievement and
         fetchAchievement(props.achievement_id).then((data) => {
@@ -123,21 +140,49 @@ const TrackerScreen = (props: TrackerScreenProps) => {
                 headers: {
                     'Authorization': 'Bearer ' + props.accessToken,
                 }
-            }).then((response) => response.json()).then((data) => {
+            }).then((response) => {
+                if (response.status === 401) {
+                    throw new UnauthorizedError('Invalid access token');
+                } else if (response.status !== 200) {
+                    throw new Error('Something went wrong, check logs');
+                } else {
+                    return response.json();
+                }
+            }).then((data) => {
                 if (data.assets.length > 0) {
                     setAchievement(prevState => ({
                         ...prevState,
                         iconUrl: data.assets[0].value
                     } as LocalAchievement));
                 }
-            });
-        });
+            }).catch((error) => {
+                if (error instanceof UnauthorizedError) {
+                    setError(error.message);
+                } else {
+                    setError('Something went wrong, check logs');
+                }
+            })
+        }).catch((error) => {
+            if (error instanceof UnauthorizedError) {
+                setError(error.message);
+            } else {
+                setError('Something went wrong, check logs');
+            }
+        })
 
 
         // load character
 
-        fetch(`https://us.api.blizzard.com/profile/wow/character/${realm_name}/${character_name}?namespace=profile-us&locale=en_US`,
-            {headers: {'Authorization': 'Bearer ' + props.accessToken}}).then(response => response.json()).then((data) => {
+        fetch(`https://us.api.blizzard.com/profile/wow/character/${realmName}/${characterName}?namespace=profile-us&locale=en_US`,
+            {headers: {'Authorization': 'Bearer ' + props.accessToken}}).then((response) => {
+            if (response.status === 401) {
+                throw new UnauthorizedError('Invalid access token');
+            } else if (response.status !== 200) {
+                throw new Error('Something went wrong, check logs');
+            } else {
+                return response.json();
+            }
+        }).then((data) => {
             setCharacter(prevState => ({
                 ...prevState,
                 id: data.id,
@@ -148,7 +193,7 @@ const TrackerScreen = (props: TrackerScreenProps) => {
                 race: data.race.name,
                 race_id: data.race.id,
                 lvl: data.level,
-                characterUrl: `https://worldofwarcraft.blizzard.com/en-us/character/us/${realm_name}/${character_name}`
+                characterUrl: `https://worldofwarcraft.blizzard.com/en-us/character/us/${realmName}/${characterName}`
             } as Character));
 
             fetch(`https://us.api.blizzard.com/data/wow/media/playable-class/${data.character_class.id}?namespace=static-us&locale=en_US`,
@@ -160,11 +205,17 @@ const TrackerScreen = (props: TrackerScreenProps) => {
                     } as Character));
                 }
             });
-        });
+        }).catch((error) => {
+            if (error instanceof UnauthorizedError) {
+                setError(error.message);
+            } else {
+                setError('Something went wrong, check logs');
+            }
+        })
 
         //
 
-        const tracked_achievement_id = localStorage.getItem('pain_tracker_achievement_id');
+        const tracked_achievement_id = localStorage.getItem('wowTrackerAchievementId');
         if (tracked_achievement_id && parseInt(tracked_achievement_id) === props.achievement_id) {
             setIsTracked(true);
         }
@@ -172,11 +223,19 @@ const TrackerScreen = (props: TrackerScreenProps) => {
 
 
     const fetchAchievement = (id: number) => {
-        return fetch(`https://us.api.blizzard.com/data/wow/achievement/${id}?namespace=static-us&locale=en_US&access_token=${props.accessToken}`, {
+        return fetch(`https://us.api.blizzard.com/data/wow/achievement/${id}?namespace=static-us&locale=en_US&accessToken=${props.accessToken}`, {
             headers: {
                 'Authorization': 'Bearer ' + props.accessToken
             }
-        }).then(response => response.json());
+        }).then(response => {
+            if (response.status === 401) {
+                throw new UnauthorizedError('Invalid access token');
+            } else if (response.status !== 200) {
+                throw new Error('Something went wrong, check logs');
+            } else {
+                return response.json();
+            }
+        })
     }
 
     const fetchAchievementMedia = (id: number) => {
@@ -184,7 +243,15 @@ const TrackerScreen = (props: TrackerScreenProps) => {
             headers: {
                 'Authorization': 'Bearer ' + props.accessToken
             }
-        }).then(response => response.json());
+        }).then(response => {
+            if (response.status === 401) {
+                throw new UnauthorizedError('Invalid access token');
+            } else if (response.status !== 200) {
+                throw new Error('Something went wrong, check logs');
+            } else {
+                return response.json();
+            }
+        })
     }
 
     const loadRequirements = async (achievementId: number): Promise<Achievement> => {
@@ -211,10 +278,10 @@ const TrackerScreen = (props: TrackerScreenProps) => {
 
     const toggleIsTracked = () => {
         if (isTracked) {
-            localStorage.removeItem('pain_tracker_achievement_id');
+            localStorage.removeItem('wowTrackerAchievementId');
             setIsTracked(false);
         } else {
-            localStorage.setItem('pain_tracker_achievement_id', props.achievement_id.toString());
+            localStorage.setItem('wowTrackerAchievementId', props.achievement_id.toString());
             setIsTracked(true);
         }
     }
@@ -223,11 +290,12 @@ const TrackerScreen = (props: TrackerScreenProps) => {
     const renderRequirements = () => {
         if ((achievementTree as any).criteria && (achievementTree as any).criteria.child_criteria) {
             return (achievementTree as any).criteria.child_criteria.map((criteria: any) => {
-                return <AchievementBlock title={criteria.achievement.name}
+                return <div key={criteria.id}><AchievementBlock  title={criteria.achievement.name}
                                          iconUrl={criteria.achievement.media.assets[0].value}
                                          data={criteria}
                                          forceOpen={expanded}
                 />
+                </div>
             });
         }
 
@@ -241,12 +309,7 @@ const TrackerScreen = (props: TrackerScreenProps) => {
     }
 
 
-    const deleteSession = () => {
-        localStorage.removeItem('pain_tracker_achievement_id');
-        localStorage.removeItem('pain_tracker');
-        localStorage.removeItem('pain_tracker_access_token');
-        window.location.reload();
-    }
+
 
     return <CharacterAchievementsProvider isLoading={isLoading} achievements={allAchievements}>
         <div>
@@ -271,16 +334,21 @@ const TrackerScreen = (props: TrackerScreenProps) => {
                 <button disabled={isLoading} onClick={toggleIsTracked} className="outline contrast"><img
                     src={isTracked ? CheckmarkIcon : WarningIcon}/> <span>{isTracked ? "Untrack" : "Track"}</span>
                 </button>
-                <button disabled={isLoading}  onClick={() => startPlanner()} className="outline contrast"><img src={BooksIcon}/> AI Planner</button>
-                <button disabled={isLoading}  onClick={() => setExpanded(!expanded)} className="outline contrast"><img src={PlusIcon}/> Expand All</button>
-                <button disabled={isLoading} onClick={deleteSession} className="outline contrast"><img src={CrossIcon}/> Delete Session</button>
+                <button disabled={isLoading} onClick={() => startPlanner()} className="outline contrast"><img
+                    src={BooksIcon}/> AI Planner
+                </button>
+                <button disabled={isLoading} onClick={() => setExpanded(!expanded)} className="outline contrast"><img src={PlusIcon}/> Expand All</button>
+                <button disabled={isLoading} onClick={deleteUserSession} className="outline contrast"><img src={CrossIcon}/> Delete Session</button>
 
             </div>
             <hr/>
             { isPlannerOpen ? <></>: null}
+
+            {!isTracked ? <article className={'alert'}>This achievement is not tracked. Click the track button to keep track of it. You can only track 1 achievement at a time, but you can preview as many as you like in a new tab.</article> : null}
             <div className={'achievements-list'}>
                 {isLoading ? <article aria-busy={true}>Loading...</article> : renderRequirements()}
             </div>
+            <ErrorModal open={error.length > 0} message={error} onClose={deleteUserSession} />
         </div>
     </CharacterAchievementsProvider>
 }

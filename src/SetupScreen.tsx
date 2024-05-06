@@ -1,14 +1,15 @@
 import React, {useState} from "react";
-
+import {UnauthorizedError} from "./helpers";
+import ErrorModal from "./components/ErrorModal";
 interface SetupScreenProps {
-    onAccessTokenCreated: (access_token: string) => void;
+    onAccessTokenCreated: (accessToken: string) => void;
 }
 const SetupScreen = (props: SetupScreenProps) => {
 
-    const [client_id, setClientId] = useState('');
-    const [client_secret, setClientSecret] = useState('');
-    const [character_name, setCharacterName] = useState('');
-    const [realm_name, setRealmName] = useState('');
+    const [clientId, setClientId] = useState('');
+    const [clientSecret, setClientSecret] = useState('');
+    const [characterName, setCharacterName] = useState('');
+    const [realmName, setRealmName] = useState('');
     const [save_credentials, setSaveCredentials] = useState(true);
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -18,27 +19,26 @@ const SetupScreen = (props: SetupScreenProps) => {
         e.preventDefault();
         setError('');
         setIsLoading(true);
-        if (!client_id || !client_secret || !character_name || !realm_name) {
-            alert('All fields are required');
+        if (!clientId || !clientSecret || !characterName || !realmName) {
+            setError('All fields are required');
             setIsLoading(false);
             return;
         }
         if (save_credentials) {
-            localStorage.setItem('pain_tracker', JSON.stringify({
-                client_id: client_id.trim(),
-                client_secret: client_secret.trim(),
-                character_name: character_name.toLowerCase().trim(),
-                realm_name: realm_name.toLowerCase().trim(),
-                save_credential: save_credentials
+            localStorage.setItem('wowTrackerUserData', JSON.stringify({
+                clientId: clientId.trim(),
+                clientSecret: clientSecret.trim(),
+                characterName: characterName.toLowerCase().trim(),
+                realmName: realmName.toLowerCase().trim()
             }));
         }
 
-        validateCredentials(client_id, client_secret);
+        validateCredentials(clientId, clientSecret);
     }
 
-    const validateCredentials = (client_id: string, client_secret: string) => {
+    const validateCredentials = (clientId: string, clientSecret: string) => {
         const requestHeaders = new Headers({
-            'Authorization': 'Basic ' + btoa(client_id + ':' + client_secret),
+            'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
         });
 
         fetch('https://oauth.battle.net/token?grant_type=client_credentials', {
@@ -46,13 +46,19 @@ const SetupScreen = (props: SetupScreenProps) => {
             headers: requestHeaders
         }).then(response => response.json()).then((data) => {
             if ('access_token' in data) {
-                localStorage.setItem('pain_tracker_access_token', data.access_token);
-                props.onAccessTokenCreated(data.access_token);
+                const token = data.access_token;
+                localStorage.setItem('wowTrackerAccessToken', token);
+                props.onAccessTokenCreated(token);
             } else {
-                throw new Error('Invalid credentials');
+               throw new UnauthorizedError('Invalid credentials');
             }
         }).catch((error) => {
-            alert('Invalid credentials or server error check logs');
+            if (error instanceof UnauthorizedError) {
+                setError(error.message + "\nPlease check the client id and client secret.");
+            }
+            else {
+                setError('Something went wrong, check logs');
+            }
         }).finally(() => {
             setIsLoading(false);
         });
@@ -69,19 +75,19 @@ const SetupScreen = (props: SetupScreenProps) => {
             </article>
             <form onSubmit={(e) => submitForm(e)}>
                 <fieldset>
-                    <input type="text" name="client_id" placeholder="Client ID"
+                    <input type="text" name="clientId" placeholder="Client ID"
                            onChange={(e) => setClientId(e.target.value)}/>
                 </fieldset>
                 <fieldset>
-                    <input type="text" name="client_secret" placeholder="Client Secret"
+                    <input type="text" name="clientSecret" placeholder="Client Secret"
                            onChange={(e) => setClientSecret(e.target.value)}/>
                 </fieldset>
                 <fieldset>
-                    <input type="text" name="character_name" placeholder="Character Name"
+                    <input type="text" name="characterName" placeholder="Character Name"
                            onChange={(e) => setCharacterName(e.target.value)}/>
                 </fieldset>
                 <fieldset>
-                    <input type="text" name="realm_name" placeholder="Realm Name"
+                    <input type="text" name="realmName" placeholder="Realm Name"
                            onChange={(e) => setRealmName(e.target.value)}/>
                 </fieldset>
                 <fieldset>
@@ -93,6 +99,7 @@ const SetupScreen = (props: SetupScreenProps) => {
                     All settings will be saved to your local storage, no credentials will be sent to any server. <br />
                     Source code of this project and all dependencies can be found on <a href="https://github.com/Zenger/wow-achievement-tracker" target="_blank">GitHub</a>.
                 </article>
+                {error && <ErrorModal open={error.length > 0} message={error} onClose={() => { setError('') }} />}
                 <fieldset>
                     <input aria-busy={isLoading} type="submit" value="Save" disabled={isLoading}/>
                 </fieldset>
