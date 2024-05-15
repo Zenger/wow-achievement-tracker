@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/wow-achievement-tracker/static/css/main.93a2ba87.css",
-    "main.js": "/wow-achievement-tracker/static/js/main.c2eae6e2.js",
-    "static/js/882.9a7b6952.chunk.js": "/wow-achievement-tracker/static/js/882.9a7b6952.chunk.js",
-    "static/media/logo.svg": "/wow-achievement-tracker/static/media/logo.e5aaa91c771315ede2fe16aee7daf44c.svg",
-    "static/media/1F4DA.svg": "/wow-achievement-tracker/static/media/1F4DA.d1be1226a2c093b474d264507d5342c6.svg",
-    "static/media/26A0.svg": "/wow-achievement-tracker/static/media/26A0.fbd5487a3a4da84dad304435762dd105.svg",
+    "main.css": "/wow-achievement-tracker/static/css/main.a52838b9.css",
+    "main.js": "/wow-achievement-tracker/static/js/main.3e41909f.js",
+    "static/js/407.e71f37a4.chunk.js": "/wow-achievement-tracker/static/js/407.e71f37a4.chunk.js",
+    "static/media/logo.svg": "/wow-achievement-tracker/static/media/logo.d4d0db2bbe283e3d3e6c9a7699ed3323.svg",
+    "static/media/1F4DA.svg": "/wow-achievement-tracker/static/media/1F4DA.b6d06517719d62ec23d763a6bb3d91ed.svg",
+    "static/media/26A0.svg": "/wow-achievement-tracker/static/media/26A0.8c35cf770ce0de010035bf3450f389a1.svg",
     "index.html": "/wow-achievement-tracker/index.html",
-    "static/media/274C.svg": "/wow-achievement-tracker/static/media/274C.1c31f6c2f27813a471d995d4fe5289e6.svg",
-    "static/media/2795.svg": "/wow-achievement-tracker/static/media/2795.7ddf83c19bccc87df71894487a5083c6.svg",
-    "static/media/2714.svg": "/wow-achievement-tracker/static/media/2714.698254ebfecb14ba2387e247ffaf6e93.svg",
-    "main.93a2ba87.css.map": "/wow-achievement-tracker/static/css/main.93a2ba87.css.map",
-    "main.c2eae6e2.js.map": "/wow-achievement-tracker/static/js/main.c2eae6e2.js.map",
-    "882.9a7b6952.chunk.js.map": "/wow-achievement-tracker/static/js/882.9a7b6952.chunk.js.map"
+    "static/media/274C.svg": "/wow-achievement-tracker/static/media/274C.8e76aff2ae626a1dfa353700f8d17dca.svg",
+    "static/media/2795.svg": "/wow-achievement-tracker/static/media/2795.b7a284085ff0ed63c1ec6f8b2cc79d73.svg",
+    "static/media/2714.svg": "/wow-achievement-tracker/static/media/2714.7a42c240ae57a0d83dcbd1019a1ee530.svg",
+    "main.a52838b9.css.map": "/wow-achievement-tracker/static/css/main.a52838b9.css.map",
+    "main.3e41909f.js.map": "/wow-achievement-tracker/static/js/main.3e41909f.js.map",
+    "407.e71f37a4.chunk.js.map": "/wow-achievement-tracker/static/js/407.e71f37a4.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.93a2ba87.css",
-    "static/js/main.c2eae6e2.js"
+    "static/css/main.a52838b9.css",
+    "static/js/main.3e41909f.js"
   ]
 }
