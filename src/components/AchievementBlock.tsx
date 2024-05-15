@@ -87,6 +87,20 @@ const AchievementBlock = (props: AchievementBlockProps) => {
     const [isOpen, setIsOpen] = React.useState(false);
     const [forceOpen, setForceOpen] = React.useState(false);
 
+    const [isAiWindowOpen, setAiWindowOpen] = React.useState(false);
+    const [isAiWindowLoading, setAiWindowLoading] = React.useState(false);
+    const [aiWindowContent, setAiWindowContent] = React.useState<string>('');
+
+    let clientId: any, clientSecret: any, characterName: any, realmName: any, saveCredentials: any, aiUrl: any;
+    ({
+        clientId,
+        clientSecret,
+        characterName,
+        realmName,
+        saveCredentials,
+        aiUrl
+    } = JSON.parse(localStorage.getItem('wowTrackerUserData') || '{}'));
+
     useEffect(() => {
         var steps = extractSteps(props.data.achievement.id, characterAchievementsData.achievements);
         setCompleteness(steps);
@@ -105,6 +119,25 @@ const AchievementBlock = (props: AchievementBlockProps) => {
     }, [props.forceOpen]);
 
 
+    const getAiSuggestions = (id: number) => {
+        setAiWindowLoading(true);
+        setAiWindowOpen(true);
+        let url = aiUrl.replace("{id}", id);
+           fetch(url).then(response => {
+               if (!response.ok) {
+                   throw new Error("Error fetching AI suggestions");
+               }
+               return response.text();
+           }).then((content) => {
+
+
+                   setAiWindowContent(content);
+
+
+           }).finally(() => {
+               setAiWindowLoading(false);
+           })
+    }
 
     const renderCriteria = () => {
 
@@ -132,7 +165,9 @@ const AchievementBlock = (props: AchievementBlockProps) => {
                     toggleHeader()
                 }} href={wu(props.data.achievement.id)} target="_blank" rel="noopener noreferrer">{props.title}</a>
             </div>
+
             <div className={'completion'}>
+
                 {accountWideWarning ?
                     <em data-tooltip={"This achievement is completed, however the steps shown here are counted for the current character."}><img
                         src={WarningIcon}
@@ -143,7 +178,24 @@ const AchievementBlock = (props: AchievementBlockProps) => {
         {isOpen ? <div className={'achievement-container'}>
             <p>{props.data.achievement.description}</p>
             {renderCriteria()}
+            <div><hr /><button onClick={() => {
+                getAiSuggestions(props.data.achievement.id)
+            }}>Get AI Suggestions</button></div>
         </div> : null}
+
+        <dialog open={isAiWindowOpen}>
+            <article>
+            <header>
+            <button aria-label="Close" rel="prev" onClick={() => setAiWindowOpen(!isAiWindowOpen)}></button>
+            <p>
+                <strong>AI generated suggestion, use with caution.</strong>
+            </p>
+            </header>
+                <div id={'ai-suggested-content'}>
+                    {isAiWindowLoading ? <article aria-busy={true}>Loading ...</article> : <div dangerouslySetInnerHTML={{__html: aiWindowContent}}></div>}
+                </div>
+            </article>
+        </dialog>
     </div>
 }
 

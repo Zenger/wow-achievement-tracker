@@ -150,3 +150,8 @@ article.alert {
     margin: 0 auto;
     display: block;
 }
+
+#ai-suggested-content h2 {
+    font-size:14px; /* too lazy to fix markdown, issue */
+    font-weight: normal;
+}

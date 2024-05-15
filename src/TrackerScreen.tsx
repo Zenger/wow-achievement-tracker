@@ -83,7 +83,7 @@ const TrackerScreen = (props: TrackerScreenProps) => {
         clientSecret,
         characterName,
         realmName,
-        save_credentials
+        saveCredentials,
     } = JSON.parse(localStorage.getItem('wowTrackerUserData') || '{}');
 
     const [isPlannerOpen, setIsPlannerOpen] = useState<boolean>(false);
@@ -103,6 +103,7 @@ const TrackerScreen = (props: TrackerScreenProps) => {
             {headers: {'Authorization': 'Bearer ' + props.accessToken}}).then((response) => {
             if (response.status === 401) {
                 throw new UnauthorizedError('Invalid access token');
+
             } else if (response.status !== 200) {
                 throw new Error('Something went wrong, check logs');
             } else {

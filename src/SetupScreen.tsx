@@ -15,7 +15,9 @@ const SetupScreen = (props: SetupScreenProps) => {
     const [clientSecret, setClientSecret] = useState('');
     const [characterName, setCharacterName] = useState('');
     const [realmName, setRealmName] = useState('');
-    const [save_credentials, setSaveCredentials] = useState(true);
+    const [saveCredentials, setSaveCredentials] = useState(true);
+
+    const [aiUrl, setAiUrl] = useState<string>('');
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
@@ -29,12 +31,13 @@ const SetupScreen = (props: SetupScreenProps) => {
             setIsLoading(false);
             return;
         }
-        if (save_credentials) {
+        if (saveCredentials) {
             localStorage.setItem('wowTrackerUserData', JSON.stringify({
                 clientId: clientId.trim(),
                 clientSecret: clientSecret.trim(),
                 characterName: characterName.toLowerCase().trim(),
-                realmName: realmName.toLowerCase().trim()
+                realmName: realmName.toLowerCase().trim(),
+                aiUrl: aiUrl
             }));
         }
 
@@ -100,14 +103,21 @@ const SetupScreen = (props: SetupScreenProps) => {
                            onChange={(e) => setRealmName(e.target.value)}/>
                 </fieldset>
                 <fieldset>
-                    <input id="save_credentials" type="checkbox" name="save_credentials"
+                    <input id="saveCredentials" type="checkbox" name="saveCredentials"
                            onChange={(e) => setSaveCredentials(e.target.checked)}/>
-                    <label htmlFor="save_credentials">Save Credentials?</label>
+                    <label htmlFor="saveCredentials">Save Credentials?</label>
                 </fieldset>
                 <article>
                     All settings will be saved to your local storage, no credentials will be sent to any server. <br />
                     Source code of this project and all dependencies can be found on <a href="https://github.com/Zenger/wow-achievement-tracker" target="_blank">GitHub</a>.
                 </article>
+                <hr/>
+                <fieldset>
+                    <input type="text" name="aiUrl" placeholder="AI URL"
+                           onChange={(e) => setAiUrl(e.target.value)}/>
+                </fieldset>
+                <p>Optionally include a server url to generate ai suggestions, {`\{id\}`} will be replaced with the achievement id. e.g https://myserver.com/ai-planner/{`\{id\}`}/suggestions</p>
+
                 {error && <ErrorModal open={error.length > 0} message={error} onClose={() => { setError('') }} />}
                 <fieldset>
                     <input aria-busy={isLoading} type="submit" value="Save" disabled={isLoading}/>
